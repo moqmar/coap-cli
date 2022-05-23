@@ -5,6 +5,7 @@ import (
 	"errors"
 	"flag"
 	"fmt"
+	"io"
 	"log"
 	"os"
 	"os/signal"
@@ -107,7 +108,11 @@ func main() {
 	}
 
 	if o == nil || (!*o) {
-		pld := strings.NewReader(*d)
+		var pld io.ReadSeeker = strings.NewReader(*d)
+		if d != nil && *d == "-" {
+			pld = os.Stdin
+		}
+		
 
 		res, err := client.Send(path, code, message.MediaType(*cf), pld, opts...)
 		if err != nil {
