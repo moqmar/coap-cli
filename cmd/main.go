@@ -110,7 +110,8 @@ func main() {
 	if o == nil || (!*o) {
 		var pld io.ReadSeeker = strings.NewReader(*d)
 		if d != nil && *d == "-" {
-			pld = os.Stdin
+			plds, _ := io.ReadAll(os.Stdin)
+			pld = bytes.NewReader(plds)
 		}
 		
 
